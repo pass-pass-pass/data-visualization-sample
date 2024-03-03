@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-12">
+            <!-- search bar -->
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Search keywords" aria-label="Search keywords" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+                </div>
+            </div>
+        </div>
+</div>
+<div class="container">
+    <h1 class="mt-5">Top Keywords in Different Universities</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <!-- logo -->
+            <img src="{{ url_for('static', filename='uiuc.jpeg') }}" style="width: 200px; height: auto;" alt="University Logo" class="mb-3" >
+            <p>Number of Unique Keywords:  </p>
+        </div>  
+        <div class="col-md-6">
+            <!-- Pie Chart -->
+            <canvas id="keywordsChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+</div>
+<script>
+    var ctx = document.getElementById('keywordsChart').getContext('2d');
+    var keywordsChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: {{ keywords.keys() | list | tojson }},
+            datasets: [{
+                label: 'Top 10 keywords for University of Illinois at Urbana Champaign',
+                data: {{ keywords.values() | list | tojson }},
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#E7E9ED', '#4BC0C0',
+                    '#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            legend: {
+                position: 'right'
+            }
+        }
+    });
+</script>
+</body>
+</html>
